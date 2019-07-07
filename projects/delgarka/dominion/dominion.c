@@ -852,15 +852,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
         int card_not_discarded = 1; //Flag for discard set!
         while(card_not_discarded) {
 	        if (state->hand[currentPlayer][p] == estate) { //Found an estate card!
-            state->coins += 4;//Add 4 coins to the amount of coins
-            state->discard[currentPlayer][state->discardCount[currentPlayer]] = state->hand[currentPlayer][p];
-            state->discardCount[currentPlayer]++;
-            for (;p < state->handCount[currentPlayer]; p++) {
-	             state->hand[currentPlayer][p] = state->hand[currentPlayer][p+1];
-            }
-	          state->hand[currentPlayer][state->handCount[currentPlayer]] = -1;
-	          state->handCount[currentPlayer]--;
-	          card_not_discarded = 0;//Exit the loop
+            card_not_discarded = processEstate(currentPlayer, state, p);
 	        }
           else if (p > state->handCount[currentPlayer]) {
 	          if (DEBUG) {
@@ -906,24 +898,14 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 
       else if (choice2)	{	//discard hand, redraw 4, other players with 5+ cards discard hand and draw 4
         //discard hand
-        while(numHandCards(state) > 0) {
-          discardCard(handPos, currentPlayer, state, 0);
-        }
-        //draw 4
-        for (i = 0; i < 4; i++) {
-          drawCard(currentPlayer, state);
-        }
+        discardAndDrawFour(handPos, currentPlayer, state);
+
         //other players discard hand and redraw if hand size > 4
         for (i = 0; i < state->numPlayers; i++) {
           if (i != currentPlayer) {
             if ( state->handCount[i] > 4 ) { //discard hand
-              while( state->handCount[i] > 0 ) {
-                discardCard(handPos, i, state, 0);
-              }
-              //draw 4
-              for (j = 0; j < 4; j++) {
-                drawCard(i, state);
-              }
+              discardAndDrawFour(handPos, i, state);
+
             }
           }
         }
@@ -972,12 +954,8 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 
       else {
         if (state->deckCount[nextPlayer] == 0) {
-          for (i = 0; i < state->discardCount[nextPlayer]; i++) {
-            state->deck[nextPlayer][i] = state->discard[nextPlayer][i]; //Move to deck
-            state->deckCount[nextPlayer]++;
-            state->discard[nextPlayer][i] = -1;
-            state->discardCount[nextPlayer]--;
-          }
+          discard(nextPlayer, state);
+
           shuffle(nextPlayer,state); //Shuffle the deck
         }
         tributeRevealedCards[0] = state->deck[nextPlayer][state->deckCount[nextPlayer]-1];
@@ -1283,6 +1261,40 @@ int gainEstate(struct gameState *state, int currentPlayer) {
       isGameOver(state);
     }
   }
+  return 0;
+}
+
+int discard(int nextPlayer, struct gameState *state) {
+  for (i = 0; i < state->discardCount[nextPlayer]; i++) {
+    state->deck[nextPlayer][i] = state->discard[nextPlayer][i]; //Move to deck
+    state->deckCount[nextPlayer]++;
+    state->discard[nextPlayer][i] = -1;
+    state->discardCount[nextPlayer]--;
+  }
+  return 0;
+}
+
+int processEstate(int currentPlayer, struct gameState* state, int p) {
+  state->coins += 4;//Add 4 coins to the amount of coins
+  state->discard[currentPlayer][state->discardCount[currentPlayer]] = state->hand[currentPlayer][p];
+  state->discardCount[currentPlayer]++;
+  for (;p < state->handCount[currentPlayer]; p++) {
+     state->hand[currentPlayer][p] = state->hand[currentPlayer][p+1];
+  }
+  state->hand[currentPlayer][state->handCount[currentPlayer]] = -1;
+  state->handCount[currentPlayer]--;
+  return 0;
+}
+
+int discardAndDrawFour(int handPos, int i, struct gameState* state) {
+  while( state->handCount[i] > 0 ) {
+    discardCard(handPos, i, state, 0);
+  }
+  //draw 4
+  for (j = 0; j < 4; j++) {
+    drawCard(i, state);
+  }
+  return 0;
 }
 
 
