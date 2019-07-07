@@ -863,17 +863,12 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 	          card_not_discarded = 0;//Exit the loop
 	        }
           else if (p > state->handCount[currentPlayer]) {
-	          if(DEBUG) {
+	          if (DEBUG) {
               printf("No estate cards in your hand, invalid choice\n");
               printf("Must gain an estate if there are any\n");
             }
-	          if (supplyCount(estate, state) > 0) {
-              gainCard(estate, state, 0, currentPlayer);
-              state->supplyCount[estate]--;//Decrement estates
-              if (supplyCount(estate, state) == 0) {
-                isGameOver(state);
-              }
-            }
+            gainEstate(state, currentPlayer);
+
             card_not_discarded = 0;//Exit the loop
           }
           else {
@@ -883,13 +878,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       }
 
       else {
-        if (supplyCount(estate, state) > 0) {
-          gainCard(estate, state, 0, currentPlayer);//Gain an estate
-          state->supplyCount[estate]--;//Decrement Estates
-          if (supplyCount(estate, state) == 0){
-            isGameOver(state);
-          }
-        }
+        gainEstate(state, currentPlayer);
       }
       return 0;
 
@@ -1183,8 +1172,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
   return -1;
 }
 
-int discardCard(int handPos, int currentPlayer, struct gameState *state, int trashFlag)
-{
+int discardCard(int handPos, int currentPlayer, struct gameState *state, int trashFlag) {
 
   //if card is not trashed, added to Played pile
   if (trashFlag < 1)
@@ -1221,8 +1209,7 @@ int discardCard(int handPos, int currentPlayer, struct gameState *state, int tra
   return 0;
 }
 
-int gainCard(int supplyPos, struct gameState *state, int toFlag, int player)
-{
+int gainCard(int supplyPos, struct gameState *state, int toFlag, int player) {
   //Note: supplyPos is enum of choosen card
 
   //check if supply pile is empty (0) or card is not used in game (-1)
@@ -1286,6 +1273,16 @@ int updateCoins(int player, struct gameState *state, int bonus)
   state->coins += bonus;
 
   return 0;
+}
+
+int gainEstate(struct gameState *state, int currentPlayer) {
+  if (supplyCount(estate, state) > 0) {
+    gainCard(estate, state, 0, currentPlayer);
+    state->supplyCount[estate]--;//Decrement estates
+    if (supplyCount(estate, state) == 0) {
+      isGameOver(state);
+    }
+  }
 }
 
 
