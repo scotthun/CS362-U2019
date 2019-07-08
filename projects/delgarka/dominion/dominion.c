@@ -1132,7 +1132,7 @@ int discardAndDrawFour(int handPos, int i, struct gameState* state) {
 }
 
 int handleBaron(int currentPlayer, int choice1, struct gameState* state) {
-  state->numBuys++; //Increase buys by 1!
+  state->numBuys--; //Increase buys by 1! INTRODUCED_BUG
   if (choice1 > 0) { //Boolean true or going to discard an estate
     int p = 0; //Iterator for hand!
     int card_not_discarded = 1; //Flag for discard set!
@@ -1140,7 +1140,7 @@ int handleBaron(int currentPlayer, int choice1, struct gameState* state) {
       if (state->hand[currentPlayer][p] == estate) { //Found an estate card!
         card_not_discarded = processEstate(currentPlayer, state, p);
       }
-      else if (p > state->handCount[currentPlayer]) {
+      else if (p >= state->handCount[currentPlayer]) { // INTRODUCED_BUG
         if (DEBUG) {
           printf("No estate cards in your hand, invalid choice\n");
           printf("Must gain an estate if there are any\n");
@@ -1161,7 +1161,7 @@ int handleBaron(int currentPlayer, int choice1, struct gameState* state) {
   return 0;
 }
 
-int handleMinion(int handPos, int choice1, int choice2, int currentPlayer, struct gameState* state) {
+int handleMinion(int handPos, int choice2, int choice1, int currentPlayer, struct gameState* state) { // INTRODUCED_BUG
   //+1 action
   state->numActions++;
 
@@ -1178,10 +1178,9 @@ int handleMinion(int handPos, int choice1, int choice2, int currentPlayer, struc
 
     //other players discard hand and redraw if hand size > 4
     for (int i = 0; i < state->numPlayers; i++) {
-      if (i != currentPlayer) {
+      if (i == currentPlayer) { // INTRODUCED_BUG
         if ( state->handCount[i] > 4 ) { //discard hand
           discardAndDrawFour(handPos, i, state);
-
         }
       }
     }
@@ -1210,12 +1209,12 @@ int handleAmbassador(int choice1, int choice2, int handPos, int currentPlayer, s
     printf("Player %d reveals card number: %d\n", currentPlayer, state->hand[currentPlayer][choice1]);
   }
   //increase supply count for choosen card by amount being discarded
-  state->supplyCount[state->hand[currentPlayer][choice1]] += choice2;
+  state->supplyCount[state->hand[currentPlayer][choice1]] += choice2 - 1; //INTRODUCED_BUG
 
   //each other player gains a copy of revealed card
   for (i = 0; i < state->numPlayers; i++)	{
     if (i != currentPlayer) {
-      gainCard(state->hand[currentPlayer][choice1], state, 0, i);
+      gainCard(state->hand[currentPlayer][choice1], state, 2, i); // INTRODUCED_BUG
     }
   }
 
@@ -1235,7 +1234,7 @@ int handleAmbassador(int choice1, int choice2, int handPos, int currentPlayer, s
   return 0;
 }
 
-int handleTribute(int currentPlayer, int nextPlayer, struct gameState* state, int* tributeRevealedCards) {
+int handleTribute(int nextPlayer, int currentPlayer, struct gameState* state, int* tributeRevealedCards) { // INTRODUCED_BUG
   if ((state->discardCount[nextPlayer] + state->deckCount[nextPlayer]) <= 1) {
     if (state->deckCount[nextPlayer] > 0) {
       tributeRevealedCards[0] = state->deck[nextPlayer][state->deckCount[nextPlayer]-1];
@@ -1272,13 +1271,13 @@ int handleTribute(int currentPlayer, int nextPlayer, struct gameState* state, in
     tributeRevealedCards[1] = -1;
   }
 
-  for (int i = 0; i <= 2; i ++) {
+  for (int i = 0; i <= 2; i ++) { // INTRODUCED_BUG
     if (tributeRevealedCards[i] == copper || tributeRevealedCards[i] == silver || tributeRevealedCards[i] == gold){//Treasure cards
-      state->coins += 2;
+      drawCard(currentPlayer, state);
+      drawCard(currentPlayer, state);
     }
     else if (tributeRevealedCards[i] == estate || tributeRevealedCards[i] == duchy || tributeRevealedCards[i] == province || tributeRevealedCards[i] == gardens || tributeRevealedCards[i] == great_hall){//Victory Card Found
-      drawCard(currentPlayer, state);
-      drawCard(currentPlayer, state);
+      state->coins += 2;
     }
     else { //Action Card
       state->numActions = state->numActions + 2;
@@ -1294,7 +1293,7 @@ int handleMine(int choice1, int choice2, int handPos, int currentPlayer, struct 
     return -1;
   }
 
-  if (choice2 > treasure_map || choice2 < curse) {
+  if (choice2 > treasure_map && choice2 < curse) { // INTRODUCED_BUG
     return -1;
   }
 
@@ -1310,7 +1309,7 @@ int handleMine(int choice1, int choice2, int handPos, int currentPlayer, struct 
   //discard trashed card
   for (int i = 0; i < state->handCount[currentPlayer]; i++) {
     if (state->hand[currentPlayer][i] == j) {
-      discardCard(i, currentPlayer, state, 0);
+      // discardCard(i, currentPlayer, state, 0); // INTRODUCED_BUG
       break;
     }
   }
