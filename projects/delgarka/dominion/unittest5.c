@@ -24,3 +24,8 @@
 * No state change should occur for other players
 * No state change should occur to victory card piles, kingdom card piles
 */
+
+int unittest5() {
+  /* code */
+  return 0;
+}

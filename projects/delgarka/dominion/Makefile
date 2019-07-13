@@ -31,7 +31,13 @@ runtests: testDrawCard
 
 testUpdateCoins: testUpdateCoins.c dominion.o rngs.o
 	gcc -o testUpdateCoins -g  testUpdateCoins.c dominion.o rngs.o $(CFLAGS)
-	
+
+unittestresults: unitTestRunner.c dominion.o rngs.o
+	gcc -o unittestresults -g unitTestRunner.c dominion.o rngs.o $(CFLAGS)
+	./unittestresults &> unittestresults.out
+	gcov dominion.c >> unittestresults.out
+	cat dominion.c.gcov >> unittestresults.out
+
 player: player.c interface.o
 	gcc -o player player.c -g  dominion.o rngs.o interface.o $(CFLAGS)
 

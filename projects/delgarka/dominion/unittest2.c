@@ -21,3 +21,8 @@
 * If choice1 other players should see no state change
 * No state change should occur to supply pile, trash pile, victory card piles, kingdom card piles
 */
+
+int unittest2() {
+  /* code */
+  return 0;
+}

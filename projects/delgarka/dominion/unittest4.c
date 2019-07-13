@@ -30,3 +30,9 @@
 * No state change should occur for players other than Target and Player
 * No state change should occur to supply pile, trash pile, victory card piles, kingdom card piles
 */
+
+
+int unittest4() {
+  /* code */
+  return 0;
+}

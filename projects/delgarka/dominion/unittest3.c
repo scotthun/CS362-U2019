@@ -21,3 +21,8 @@
 * After play, M other players' decks should contain 1 more card
 * No state change should occur to trash pile, victory card piles, kingdom card piles, or to other players' hands
 */
+
+int unittest3() {
+  /* code */
+  return 0;
+}
