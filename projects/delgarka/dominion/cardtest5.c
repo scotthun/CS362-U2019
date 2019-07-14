@@ -12,7 +12,9 @@
 #include "rngs.h"
 
 /* Basic requirements of drawCard():
-*
+* Player should remove the top card from their Deck
+* Player should add removed card to their Hand
+* If Deck does not contain any cards, discard pile should be shuffled and reset as Deck
 */
 
 int cardtest5() {
