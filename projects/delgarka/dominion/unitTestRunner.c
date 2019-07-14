@@ -10,6 +10,7 @@
 #include "cardtest4.c"
 #include "cardtest5.c"
 
+#include "unitTest_helper.c"
 
 int main(int argc, char const *argv[]) {
   unittest1();

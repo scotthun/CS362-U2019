@@ -37,6 +37,7 @@ unittestresults: unitTestRunner.c dominion.o rngs.o
 	./unittestresults &> unittestresults.out
 	gcov dominion.c >> unittestresults.out
 	cat dominion.c.gcov >> unittestresults.out
+	rm -rf unittestresults *.gcno *.gcda
 
 player: player.c interface.o
 	gcc -o player player.c -g  dominion.o rngs.o interface.o $(CFLAGS)
