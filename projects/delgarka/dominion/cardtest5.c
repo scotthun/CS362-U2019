@@ -17,7 +17,7 @@
 * If Deck does not contain any cards, discard pile should be shuffled and reset as Deck
 */
 
-int cardtest5() {
+int main() {
 
     return 0;
 }

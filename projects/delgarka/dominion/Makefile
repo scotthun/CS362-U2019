@@ -1,4 +1,4 @@
-CFLAGS= -Wall -fpic -coverage -lm -std=c99
+CFLAGS= -Wall -fpic --coverage -lm -std=c99
 
 rngs.o: rngs.h rngs.c
 	gcc -c rngs.c -g  $(CFLAGS)
@@ -32,12 +32,38 @@ runtests: testDrawCard
 testUpdateCoins: testUpdateCoins.c dominion.o rngs.o
 	gcc -o testUpdateCoins -g  testUpdateCoins.c dominion.o rngs.o $(CFLAGS)
 
-unittestresults: unitTestRunner.c dominion.o rngs.o
-	gcc -o unittestresults -g unitTestRunner.c dominion.o rngs.o $(CFLAGS)
-	./unittestresults &> unittestresults.out
-	gcov dominion.c >> unittestresults.out
-	cat dominion.c.gcov >> unittestresults.out
-	rm -rf unittestresults *.gcno *.gcda
+unittestresults:
+	gcc -o unittest1 dominion.c rngs.c unittest1.c asserttrue.c $(CFLAGS)
+	unittest1 &> unittestresults.out
+	gcov dominion.c -b >> unittestresults.out
+	gcc -o unittest2 dominion.c rngs.c unittest2.c asserttrue.c $(CFLAGS)
+	unittest2 >> unittestresults.out
+	gcov dominion.c -b >> unittestresults.out
+	gcc -o unittest3 dominion.c rngs.c unittest3.c asserttrue.c $(CFLAGS)
+	unittest3 >> unittestresults.out
+	gcov dominion.c -b >> unittestresults.out
+	gcc -o unittest4 dominion.c rngs.c unittest4.c asserttrue.c $(CFLAGS)
+	unittest4 >> unittestresults.out
+	gcov dominion.c -b >> unittestresults.out
+	gcc -o unittest5 dominion.c rngs.c unittest5.c asserttrue.c $(CFLAGS)
+	unittest5 >> unittestresults.out
+	gcov dominion.c -b >> unittestresults.out
+	gcc -o cardtest1 dominion.c rngs.c cardtest1.c asserttrue.c $(CFLAGS)
+	cardtest1 >> unittestresults.out
+	gcov dominion.c -b >> unittestresults.out
+	gcc -o cardtest2 dominion.c rngs.c cardtest2.c asserttrue.c $(CFLAGS)
+	cardtest2 >> unittestresults.out
+	gcov dominion.c -b >> unittestresults.out
+	gcc -o cardtest3 dominion.c rngs.c cardtest3.c asserttrue.c $(CFLAGS)
+	cardtest3 >> unittestresults.out
+	gcov dominion.c -b >> unittestresults.out
+	gcc -o cardtest4 dominion.c rngs.c cardtest4.c asserttrue.c interface.c $(CFLAGS)
+	cardtest4 >> unittestresults.out
+	gcov dominion.c -b >> unittestresults.out
+	gcc -o cardtest5 dominion.c rngs.c cardtest5.c asserttrue.c $(CFLAGS)
+	cardtest5 >> unittestresults.out
+	gcov dominion.c -b >> unittestresults.out
+	rm -rf *.gc*
 
 player: player.c interface.o
 	gcc -o player player.c -g  dominion.o rngs.o interface.o $(CFLAGS)

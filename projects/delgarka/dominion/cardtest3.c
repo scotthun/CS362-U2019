@@ -34,7 +34,7 @@ struct gameState setupEndTurnTest() {
   return G;
 }
 
-int cardtest3() {
+int main() {
   printf("TESTING endTurn()\n");
   struct gameState G;
 

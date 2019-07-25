@@ -24,7 +24,7 @@
 * Trash pile should start out empty
 */
 
-int cardtest1() {
+int main() {
   printf("TESTING initializeGame()\n");
   int seed = 1000;
   int k[10] = {adventurer, council_room, feast, gardens, mine

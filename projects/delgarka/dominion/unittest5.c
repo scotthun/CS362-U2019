@@ -38,7 +38,7 @@ struct gameState setupMineTest() {
   return G;
 }
 
-int unittest5() {
+int main() {
   int r, handCount, numActions, discardCount;
   struct gameState G = setupMineTest();
 

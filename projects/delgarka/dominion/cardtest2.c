@@ -15,7 +15,7 @@
 * Cards should not be in same order in deck after shuffle()
 */
 
-int cardtest2() {
+int main() {
   int seed = 1000;
   int numPlayer = 2;
   int k[10] = {adventurer, minion, feast, gardens, mine

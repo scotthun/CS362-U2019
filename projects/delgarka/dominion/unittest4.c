@@ -48,7 +48,7 @@ struct gameState setupTributeTest(int* tributeRevealedCards) {
   return G;
 }
 
-int unittest4() {
+int main() {
   int tributeRevealedCards[2] = {-1, -1};
   struct gameState G = setupTributeTest(&tributeRevealedCards);
   int actionsPre = G.numActions;

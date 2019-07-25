@@ -25,7 +25,7 @@
 * No state change should occur to supply pile, trash pile, kingdom card piles
 */
 
-int unittest1() {
+int main() {
   int seed = 1000;
   int numPlayer = 2;
   int PLAYER = 0;

@@ -41,7 +41,7 @@ struct gameState setupAmbassadorTest(int numGardens) {
   return G;
 }
 
-int unittest3() {
+int main() {
   int r, deckCount, discardCount, numGardensPre[N], numGardensPost[N];
   struct gameState G = setupAmbassadorTest(4);
   printf ("TESTING handleAmbassador():\n");

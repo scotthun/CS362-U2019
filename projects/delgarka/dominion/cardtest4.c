@@ -30,7 +30,7 @@ struct gameState setupGetWinnersTest() {
   return G;
 }
 
-int cardtest4() {
+int main() {
   printf("TESTING getWinners()\n");
   struct gameState G;
   int players[N];
