@@ -34,7 +34,7 @@ testUpdateCoins: testUpdateCoins.c dominion.o rngs.o
 
 unittestresults:
 	gcc -o unittest1 dominion.c rngs.c unittest1.c asserttrue.c $(CFLAGS)
-	unittest1 &> unittestresults.out
+	unittest1 > unittestresults.out
 	gcov dominion.c -b >> unittestresults.out
 	gcc -o unittest2 dominion.c rngs.c unittest2.c asserttrue.c $(CFLAGS)
 	unittest2 >> unittestresults.out
@@ -63,7 +63,6 @@ unittestresults:
 	gcc -o cardtest5 dominion.c rngs.c cardtest5.c asserttrue.c $(CFLAGS)
 	cardtest5 >> unittestresults.out
 	gcov dominion.c -b >> unittestresults.out
-	rm -rf *.gc*
 
 player: player.c interface.o
 	gcc -o player player.c -g  dominion.o rngs.o interface.o $(CFLAGS)
