@@ -992,7 +992,7 @@ state->numBuys++;//Increase buys by 1!
 	int p = 0;//Iterator for hand!
 	int card_not_discarded = 1;//Flag for discard set!
 	//ADDED bug, added ! so that when player is supposed to discard estate and get +4 gold, this will never happen
-	while(!card_not_discarded){
+	while(card_not_discarded){
 	  if (state->hand[currentPlayer][p] == estate){//Found an estate card!
 	    state->coins += 4;//Add 4 coins to the amount of coins
 	    state->discard[currentPlayer][state->discardCount[currentPlayer]] = state->hand[currentPlayer][p];
@@ -1011,7 +1011,7 @@ state->numBuys++;//Increase buys by 1!
 	    }
 	    if (supplyCount(estate, state) > 0){
 	      gainCard(estate, state, 0, currentPlayer);
-	      //state->supplyCount[estate]--;//Decrement estates, ADDED BUG, will cause the game to keep going erroneously due to not registering changes in estate
+	      //state->supplyCount[estate]--;//Decrement estates, 
 
 	      if (supplyCount(estate, state) == 0){
 		isGameOver(state);
